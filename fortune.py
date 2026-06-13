@@ -31,10 +31,16 @@ def take_test():
 
     for trait in questions:
         for question in questions[trait] :
-            answer = input(f"\n{question} (y/n): ").lower()
 
-            if answer == 'y':
-                scores[trait] += 1
+            while True:
+                answer = input(f"\n{question} (y/n): ").strip().lower()
+                if answer == 'y':
+                    scores[trait] += 1
+                    break
+                elif answer == 'n':
+                    break
+                else:
+                    print("\nInvalid input! Please enter only 'y' or 'n'.\n")
 
     # Get personality type and fortune message based on final scores
     personality, fortune = get_result(scores)
@@ -47,7 +53,7 @@ def get_result(scores):
     if scores["caring"] > scores["social"] and scores["caring"] > scores["adventurous"] :
         return "Caring" , "Your kindnes will bring stronger relationships."
     
-    elif scores["social"] > scores["caring"] and scores["social"] > scores["adventerous"] :
+    elif scores["social"] > scores["caring"] and scores["social"] > scores["adventurous"] :
         return "Social" , "New connections are coming your way."
     
     elif scores["adventurous"] > scores["caring"] and scores["adventurous"] > scores["social"] :
@@ -67,9 +73,7 @@ def view_result(user):
     print("Caring: ", user["score"]["caring"])
     print("Social: ", user["score"]["social"])
     print("Adventurous: ", user["score"]["adventurous"])
-
-#view all users
-#def view_all_users():
+  
 #search result
 # def search_result():
 
