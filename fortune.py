@@ -35,9 +35,26 @@ def take_test():
             if answer == 'y':
                 scores[trait] += 1
 
+    # Get personality type and fortune message based on final scores
     personality, fortune = get_result(scores)
+
+    # Store all user data in a dictionary and return it
     return {"name" : name, "score" : scores, "personality": personality, "fortune": fortune }
 
+#decide personality and fortune
+def get_result(scores):
+    if scores["caring"] > scores["social"] and scores["caring"] > scores["adventurous"] :
+        return "Caring" , "Your kindnes will bring stronger relationships."
+    
+    elif scores["social"] > scores["caring"] and scores["social"] > scores["adventerous"] :
+        return "Social" , "New connections are coming your way."
+    
+    elif scores["adventurous"] > scores["caring"] and scores["adventurous"] > scores["social"] :
+        return "Adventurous" , "Exciting experiences are ahead."
+    
+    else : 
+        return "Balanced", "You have a well balanced personality."
+    
 #view result
 # def view_result():
 
