@@ -50,19 +50,38 @@ def take_test():
 
 #decide personality and fortune
 def get_result(scores):
-    if scores["caring"] > scores["social"] and scores["caring"] > scores["adventurous"] :
-        return "Caring" , "Your kindnes will bring stronger relationships."
+    caring = scores["caring"]
+    social = scores["social"]
+    adventurous = scores["adventurous"]
+
+    max_score = max(caring, social, adventurous)
+
+    # count how many have max score
+    count = 0
+    if caring == max_score:
+        count += 1
+    if social == max_score:
+        count += 1
+    if adventurous == max_score:
+        count += 1
     
-    elif scores["social"] > scores["caring"] and scores["social"] > scores["adventurous"] :
-        return "Social" , "New connections are coming your way."
+    # if all equal
+    if count == 3:
+        return "Balanced", "You have a perfectly balanced personality."
+
+    # tie between two traits
+    if count > 1:
+        return "Mixed", "You have a combination of personalities."
+
+    # single winner cases
+    if caring == max_score:
+        return "Caring", "Your kindness will bring strong relationships."
+    elif social == max_score:
+        return "Social", "New connections are coming your way."
+    else:
+        return "Adventurous", "Exciting experiences are ahead."
     
-    elif scores["adventurous"] > scores["caring"] and scores["adventurous"] > scores["social"] :
-        return "Adventurous" , "Exciting experiences are ahead."
-    
-    else : 
-        return "Balanced", "You have a well balanced personality."
-    
-#view result -> current test result
+#view result 
 def view_result(user):
     print("\n--------RESULT--------")
     print("Name: ", user["name"])
@@ -75,85 +94,93 @@ def view_result(user):
     print("Adventurous: ", user["score"]["adventurous"])
   
 #search result
-def search_result():
-    try:
-        if len(users) == 0:
-            raise ValueError("\nNo data found.")
-        
-        name = input("\nEnter the name to search: ").strip().lower()
-        found = [user for user in users if user["name"] == name]
-        
-        if len(found) == 0:
-            raise ValueError("\nNo data found.")
-        
-        for user in found:
-            view_result(user)
-
-    except ValueError as e:
-        print(f"\nI have searched and there is no data. Please select another option.")
-
+def search_result(users):
+    if len(users) == 0:
+       print("\nNo data found.")
+       return
+    
+    name = input("\nEnter the name to search: ").strip().lower()
+    
+    found = []
+    for user in users :
+        if user["name"] == name:
+            found.append(user)
+    
+    if len(found) == 0:
+        print("\nNo data found.")
+        return
+    
+    for user in found:
+        view_result(user)
 
 #delete result
-def delete_result():
-    try:
-        if len(users) == 0:
-            raise ValueError("\nNo data found.")
-        
-        name = input("\nEnter the name to delete: ").strip().lower()
-        found = [user for user in users if user["name"] == name]
-        
-        if len(found) == 0:
-            raise ValueError("\nNo data found.")
-        
-        for user in found:
-            users.remove(user)
-        
-        print(f"\nResult for '{name}' has been deleted successfully.")
-
-    except ValueError as e:
-        print(f"\nThere is no data to delete. Please select another option.")
-
+def delete_result(users):
+    if len(users) == 0:
+        print("\nNo data found.")
+        return
+    
+    name = input("\nEnter the name to delete: ").strip().lower()
+    
+    found = []
+    for user in users :
+        if user["name"] == name:
+            found.append(user)
+    
+    if len(found) == 0:
+        print("\nNo data found.")
+        return
+    
+    for user in found:
+        users.remove(user)
+    
+    print(f"\nResult for '{name}' has been deleted successfully.")
 
 #menu
-# while True:
-while True:
-    print("\nWELCOME TO PERSONALITY BASED FORTUNE TELLING SYSTEM")
-    print("\n Lets get started !")
-    print("\n----- MENU -----")
-    print("\n1. Take Test")
-    print("\n2. View Result")
-    print("\n3. Search Result")
-    print("\n4. Delete Result")
-    print("\n5. Exit")
+def main():
+    while True:
+        print("\nWELCOME TO PERSONALITY BASED FORTUNE TELLING SYSTEM")
+        print("\n Lets get started !")
+        print("\n----- MENU -----")
+        print("\n1. Take Test")
+        print("\n2. View Result")
+        print("\n3. View All User Result")
+        print("\n4. Search Result")
+        print("\n5. Delete Result")
+        print("\n6. Exit")
 
-    try:
-        choice = int(input("\nEnter a number: "))
-    except ValueError:
-        print("\nInvalid input!")
-        continue
+        try:
+            choice = int(input("\nEnter a number: "))
+        except ValueError:
+            print("\nInvalid input!")
 
-    if choice == 1:
-        user = take_test()
-        users.append(user)
+        if choice == 1:
+            user = take_test()
+            users.append(user)
 
-    elif choice == 2:
-        if len(users) == 0:
-            print("\nNo result available. Please take a test first.")
+        elif choice == 2:
+            if len(users) == 0:
+                print("\nNo result available. Please take a test first.")
+            else:
+                view_result(users[-1])
+
+        elif choice == 3:
+            if len(users) == 0:
+                print("\nNo users found.")
+            else:
+                for user in users:
+                    view_result(user)
+
+        elif choice == 4:
+            search_result(users)
+
+        elif choice == 5:
+            delete_result(users)
+
+        elif choice == 6:
+            print("\nGoodbye!")
+            break
+
         else:
-            view_result(users[-1])
-
-    elif choice == 3:
-        search_result()
-
-    elif choice == 4:
-        delete_result()
-
-    elif choice == 5:
-        print("\nGoodbye!")
-        break
-
-    else:
-        print("\nInvalid choice!")
-
-        
-
+            print("\nInvalid choice!")
+  
+main()
