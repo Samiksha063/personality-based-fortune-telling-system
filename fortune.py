@@ -1,6 +1,7 @@
 # project title : personality based fortune telling system 
 # group members : samiksha shrestha and bina maya ghale
 
+users = []
 #take test -> asks questions
 def take_test():
     name = input("\nEnter your name: ").strip().lower()
@@ -55,10 +56,20 @@ def get_result(scores):
     else : 
         return "Balanced", "You have a well balanced personality."
     
-#view result
-# def view_result():
+#view result -> current test result
+def view_result(user):
+    print("\n--------RESULT--------")
+    print("Name: ", user["name"])
+    print("Personality: ", user["personality"])
+    print("Fortune: ", user["fortune"])
 
+    print("Scores")
+    print("Caring: ", user["score"]["caring"])
+    print("Social: ", user["score"]["social"])
+    print("Adventurous: ", user["score"]["adventurous"])
 
+#view all users
+#def view_all_users():
 #search result
 # def search_result():
 
@@ -86,10 +97,11 @@ while True:
         continue
 
     if choice == 1:
-        take_test()
+        user = take_test()
+        users.append(user)
 
     elif choice == 2:
-        view_result()
+        view_result(users[-1])
 
     elif choice == 3:
         search_result()
