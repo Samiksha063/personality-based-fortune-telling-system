@@ -75,11 +75,43 @@ def view_result(user):
     print("Adventurous: ", user["score"]["adventurous"])
   
 #search result
-# def search_result():
+def search_result():
+    try:
+        if len(users) == 0:
+            raise ValueError("\nNo data found.")
+        
+        name = input("\nEnter the name to search: ").strip().lower()
+        found = [user for user in users if user["name"] == name]
+        
+        if len(found) == 0:
+            raise ValueError("\nNo data found.")
+        
+        for user in found:
+            view_result(user)
+
+    except ValueError as e:
+        print(f"\nI have searched and there is no data. Please select another option.")
 
 
 #delete result
-# def delete_result():
+def delete_result():
+    try:
+        if len(users) == 0:
+            raise ValueError("\nNo data found.")
+        
+        name = input("\nEnter the name to delete: ").strip().lower()
+        found = [user for user in users if user["name"] == name]
+        
+        if len(found) == 0:
+            raise ValueError("\nNo data found.")
+        
+        for user in found:
+            users.remove(user)
+        
+        print(f"\nResult for '{name}' has been deleted successfully.")
+
+    except ValueError as e:
+        print(f"\nThere is no data to delete. Please select another option.")
 
 
 #menu
@@ -105,7 +137,10 @@ while True:
         users.append(user)
 
     elif choice == 2:
-        view_result(users[-1])
+        if len(users) == 0:
+            print("\nNo result available. Please take a test first.")
+        else:
+            view_result(users[-1])
 
     elif choice == 3:
         search_result()
